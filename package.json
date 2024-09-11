@@ -1,0 +1,23 @@
+{
+  "name": "udacity-images-processing-api",
+  "version": "0.0.1",
+  "description": "A Node.js server that processes images and resizes them based on the URL parameters provided.",
+  "main": "index.js",
+  "scripts": {
+    "jasmine": "jasmine",
+    "build": "npx tsc",
+    "test": "npx tsc && npm run jasmine"
+  },
+  "author": "Michael Barnes",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "^5.1.4",
+    "@types/node": "^22.5.4",
+    "typescript": "^5.6.2"
+  },
+  "dependencies": {
+    "express": "^4.20.0",
+    "jasmine": "^5.3.0",
+    "jasmine-spec-reporter": "^7.0.0"
+  }
+}
