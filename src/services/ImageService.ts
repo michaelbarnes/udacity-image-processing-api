@@ -8,12 +8,10 @@ export default class ImageService {
 		this.sharpClient = new SharpUtility();
 	}
 
-	public async getImage(fileName: string): Promise<void | null> {
+	public async getFile(fileName: string | null): Promise<void | null> {
 		const file = await openFile(`assets/full/${fileName}`);
 		if (!file) {
 			return null;
 		}
-
-		console.log("Image Service");
 	}
 }

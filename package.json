@@ -5,11 +5,11 @@
 	"main": "index.js",
 	"scripts": {
 		"jasmine": "jasmine",
-		"build": "npm run prettier && npx tsc",
-		"test": "npm run build && npm run jasmine",
+		"build": "npx tsc",
+		"test": "npm run prettier && npm run build && npm run jasmine",
 		"prettier": "npx prettier . --write --use-tabs",
-		"start": "node ./dist",
-		"dev": "npx nodemon ./src/index.ts"
+		"start": "npm run build && node ./dist",
+		"dev": "npm run prettier && npx nodemon ./src/index.ts"
 	},
 	"author": "Michael Barnes",
 	"license": "MIT",
@@ -18,9 +18,10 @@
 		"@types/jasmine": "^5.1.4",
 		"@types/node": "^22.5.4",
 		"@types/sharp": "^0.31.1",
-		"@types/uuid": "^10.0.0",
+		"@types/supertest": "^6.0.2",
 		"nodemon": "^3.1.4",
 		"prettier": "3.3.3",
+		"supertest": "^7.0.0",
 		"ts-node": "^10.9.2",
 		"typescript": "^5.6.2"
 	},
@@ -28,7 +29,6 @@
 		"express": "^4.20.0",
 		"jasmine": "^5.3.0",
 		"jasmine-spec-reporter": "^7.0.0",
-		"sharp": "^0.33.5",
-		"uuid": "^10.0.0"
+		"sharp": "^0.33.5"
 	}
 }

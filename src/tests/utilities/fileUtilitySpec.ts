@@ -1,10 +1,12 @@
 import { openFile, writeFile, deleteFile } from "../../utilities/FileUtility";
 
 describe("tests functions from FileUtility", () => {
-	const testFileDir = "assets/test/test.text";
+	const testFileDir = "assets/test/test.txt";
 
-	it("it should the sample png file that exists already", async () => {
-		expect(await openFile("assets/full/sample.png")).toBeTruthy();
+	it("it should open the sample png file that exists already", async () => {
+		const fileHandle = await openFile("assets/full/sample.png");
+		fileHandle?.close();
+		expect(fileHandle).toBeTruthy();
 	});
 
 	it("it should should be null because the file does not exist", async () => {

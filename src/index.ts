@@ -1,12 +1,12 @@
 import express from "express";
 import { logger } from "./middleware/logger";
-import ApiRouter from "./routes";
+import Controllers from "./controllers";
 
 const Port = 3000;
 
-class Server {
-	private app: express.Application;
-	private apiRouter = new ApiRouter();
+export default class Server {
+	public app: express.Application;
+	private controllers: Controllers = new Controllers();
 
 	constructor() {
 		this.app = express();
@@ -14,12 +14,9 @@ class Server {
 	}
 
 	public init(): void {
-		console.log(
-			`Running init to configure application, setting port and loading middleware`,
-		);
-		this.app.set("port", Port);
+		this.app.set("port", process.env.PORT ? process.env.PORT : Port);
 		this.app.use(logger);
-		this.app.use(this.apiRouter.router);
+		this.app.use(this.controllers.router);
 	}
 
 	public start(): void {

@@ -8,7 +8,7 @@ Here are the key libraries used in this application:
 3. Jasmine - Unit testing
 4. Express - HTTP server
 5. Sharp - Image processing library
-6. Prettier - Code formatting (options set to --tab-width 1 for tab indentation)
+6. Prettier - Code formatting (options set to use --use-tabs for tab indentation, I prefer it)
 
 ## Setup
 
@@ -19,7 +19,7 @@ This project requires nvm or the latest LTS Node.js version. Follow the [nvm ins
 1. If you're using nvm run the following command in the route directory:
 
 ```shell
-~ nvm exec
+~ nvm use
 ```
 
 This will look at the `.nvmrc` file in the route directory and will use the Node.js version specified in the file.
@@ -34,9 +34,15 @@ This will look at the `.nvmrc` file in the route directory and will use the Node
 ~ npm install
 ```
 
+3. Whilst editing code and making changes you can use nodemon to refresh after changes are saved to disk. This runs the TS files using ts-node, it's not the compiled code.
+
+```shell
+~ npm run dev
+```
+
 ### Building
 
-1. To compile and build from source run the following command:
+1. To compile and build from source run the following command.
 
 ```shell
 ~ npm run build
@@ -55,3 +61,9 @@ This will compile the TS files into the `./dist` folder in the route directory
 This command will build the code from source and then run Jasmine to execute the tests.
 
 ## Run the server
+
+To start the server simply run the start command.
+
+```shell
+~ npm run start
+```
