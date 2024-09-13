@@ -1,16 +1,11 @@
-import sharp from "sharp";
+import sharp, { FitEnum } from "sharp";
 
 export type ResizeOptions = {
-	fileDirectory: string;
+	file: string | Buffer;
 	width: number;
 	height: number;
 };
 
-export default class SharpUtility {
-	public InputDirectory: string = "./assets/full";
-	public ThumbDirectory: string = "./assets/thumb";
-
-	public resize(options: ResizeOptions) {
-		return sharp(options.fileDirectory).resize(options.width, options.height);
-	}
-}
+export const resizeImage = (options: ResizeOptions) => {
+	return sharp(options.file).resize(options.width, options.height).toBuffer();
+};

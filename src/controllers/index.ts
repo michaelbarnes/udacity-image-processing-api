@@ -10,10 +10,9 @@ import ImageController from "./image";
 export default class Controllers {
 	public router: Router;
 
-	private imageController: ImageController;
+	private imageController: ImageController = new ImageController();
 
 	constructor() {
-		this.imageController = new ImageController();
 		this.router = Router();
 		this.router.use("/api", this.imageController.router);
 		this.router.get("/", this.landingPageController);

@@ -7,7 +7,7 @@ const server: Server = new Server();
 const request = supertest(server.app);
 
 describe("test the Landing Page", () => {
-	it("It should respond with 200", async () => {
+	it("it should respond with 200", async () => {
 		const response = await request.get("/");
 		expect(response.status).toEqual(200);
 	});

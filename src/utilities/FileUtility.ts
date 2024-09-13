@@ -1,8 +1,9 @@
-import { promises as fs } from "fs";
+import { promises as fs, readFile } from "fs";
 import { FileHandle } from "fs/promises";
 
 /**
- * Tries to open a file in the assets/full directory using the "r" flag, if the file does not exist, it returns null.
+ * Tries to open a file in the assets/full directory using the "r" flag, if the file does not exist
+ * an error is thrown (ENOTFOUND) and return null.
  * @param fileName
  */
 export const openFile = async (
@@ -22,11 +23,19 @@ export const openFile = async (
  */
 export const writeFile = async (
 	fileName: string,
-	data: string,
+	data: string | Buffer,
 ): Promise<void> => {
 	return await fs.writeFile(fileName, data);
 };
 
-export const deleteFile = async (fileName: string) => {
+/**
+ * Delete a file with for the provided directory/file
+ * @param fileName
+ */
+export const deleteFile = async (fileName: string): Promise<void> => {
 	await fs.rm(fileName);
+};
+
+export const readData = async (fileName: string) => {
+	await fs.readFile(fileName, { encoding: "base64" });
 };
