@@ -1,6 +1,5 @@
 import { promises as fs } from "fs";
 import { FileHandle } from "fs/promises";
-import * as buffer from "buffer";
 
 /**
  * Tries to open a file in the assets/full directory using the "r" flag, if the file does not exist
