@@ -1,8 +1,8 @@
 import path from "path";
 import { FileHandle } from "fs/promises";
 import { Router, Request, Response } from "express";
-import { openFile, writeFile } from "../../utilities/FileUtility";
-import { resizeImage } from "../../utilities/SharpUtility";
+import { openFile, writeFile } from "../../utilities/fileUtility";
+import { resizeImage } from "../../utilities/sharpUtility";
 
 export default class ImageController {
 	public router: Router;

@@ -24,7 +24,10 @@ export default class Controllers {
 	 * @param res
 	 * @private
 	 */
-	private async landingPageController(req: Request, res: Response): Promise<void> {
+	private async landingPageController(
+		req: Request,
+		res: Response,
+	): Promise<void> {
 		res.status(200).sendFile(path.join(__dirname, "../../public/index.html"));
 	}
 }

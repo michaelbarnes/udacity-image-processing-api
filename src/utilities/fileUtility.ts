@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import { FileHandle } from "fs/promises";
+import * as buffer from "buffer";
 
 /**
  * Tries to open a file in the assets/full directory using the "r" flag, if the file does not exist
@@ -25,7 +26,7 @@ export const writeFile = async (
 	fileName: string,
 	data: string | Buffer,
 ): Promise<void> => {
-	return await fs.writeFile(fileName, data);
+	await fs.writeFile(fileName, data);
 };
 
 /**
@@ -34,4 +35,21 @@ export const writeFile = async (
  */
 export const deleteFile = async (fileName: string): Promise<void> => {
 	await fs.rm(fileName);
+};
+
+export const dirExists = async (dirName: string): Promise<boolean> => {
+	try {
+		await fs.opendir(dirName);
+		return true;
+	} catch (err) {
+		return false;
+	}
+};
+
+export const createDir = async (dirName: string): Promise<void> => {
+	await fs.mkdir(dirName, { recursive: true });
+};
+
+export const readFile = async (fileName: string): Promise<Buffer> => {
+	return await fs.readFile(fileName);
 };
