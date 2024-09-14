@@ -64,11 +64,7 @@ export default class ImageController {
 			const fileBuffer: Buffer = await fullFile.readFile();
 			await fullFile.close();
 
-			const resizedImage: Buffer = await resizeImage({
-				file: fileBuffer,
-				width: width,
-				height: height,
-			});
+			const resizedImage: Buffer = await resizeImage(fileBuffer, width, height);
 
 			await writeFile(thumbFileName, resizedImage);
 		}

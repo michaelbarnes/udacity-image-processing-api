@@ -1,11 +1,7 @@
-import sharp, { FitEnum } from "sharp";
+import sharp from "sharp";
 
-export type ResizeOptions = {
-	file: string | Buffer;
-	width: number;
-	height: number;
-};
-
-export const resizeImage = (options: ResizeOptions) => {
-	return sharp(options.file).resize(options.width, options.height).toBuffer();
+export const resizeImage = (file: string | Buffer, width: number, height: number) => {
+	return sharp(file)
+		.resize(width, height, { fit: "contain"})
+		.toBuffer();
 };

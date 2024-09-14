@@ -1,5 +1,5 @@
 import path from "path";
-import { Router, Request, Response } from "express";
+import { Router, Response, Request } from "express";
 import ImageController from "./image";
 
 /**
@@ -18,10 +18,13 @@ export default class Controllers {
 		this.router.get("/", this.landingPageController);
 	}
 
-	private async landingPageController(
-		req: Request,
-		res: Response,
-	): Promise<void> {
+	/**
+	 * Fetches the landing page when the route path is opened in the browser
+	 * @param req
+	 * @param res
+	 * @private
+	 */
+	private async landingPageController(req: Request, res: Response): Promise<void> {
 		res.status(200).sendFile(path.join(__dirname, "../../public/index.html"));
 	}
 }
