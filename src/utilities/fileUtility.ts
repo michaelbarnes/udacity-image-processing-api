@@ -49,6 +49,6 @@ export const createDir = async (dirName: string): Promise<void> => {
 	await fs.mkdir(dirName, { recursive: true });
 };
 
-export const readFile = async (fileName: string): Promise<Buffer> => {
-	return await fs.readFile(fileName);
+export const listDir = async (dirName: string): Promise<string[]> => {
+	return await fs.readdir(dirName);
 };

@@ -1,8 +1,11 @@
 import path from "path";
 import { FileHandle } from "fs/promises";
 import { Router, Request, Response } from "express";
-import { openFile, writeFile } from "../../utilities/fileUtility";
+import { openFile, writeFile, listDir } from "../../utilities/fileUtility";
 import { resizeImage } from "../../utilities/sharpUtility";
+
+const FullDirectory: string = "assets/full";
+const ThumbDirectory: string = "assets/thumb";
 
 export default class ImageController {
 	public router: Router;
@@ -14,6 +17,7 @@ export default class ImageController {
 
 	private initRoutes() {
 		this.router.get("/images", this.get);
+		this.router.get("/images/list", this.list);
 	}
 
 	/**
@@ -26,9 +30,6 @@ export default class ImageController {
 	 * @private
 	 */
 	private async get(req: Request, res: Response) {
-		const fullDirectory: string = "assets/full";
-		const thumbDirectory: string = "assets/thumb";
-
 		const fileName: string | null = req.query.filename
 			? (req.query.filename as string).toLowerCase()
 			: null;
@@ -47,8 +48,8 @@ export default class ImageController {
 			return;
 		}
 
-		const thumbFileName: string = `${thumbDirectory}/${fileName}_${width}_${height}.png`;
-		const fullFileName: string = `${fullDirectory}/${fileName}.png`;
+		const thumbFileName: string = `${ThumbDirectory}/${fileName}_${width}_${height}.png`;
+		const fullFileName: string = `${FullDirectory}/${fileName}.png`;
 
 		// Next, try and get the supplied thumb by size
 		let thumbFile: FileHandle | null = await openFile(thumbFileName);
@@ -71,5 +72,10 @@ export default class ImageController {
 		await thumbFile?.close();
 		const imagePath: string = path.join(__dirname, `../../../${thumbFileName}`);
 		res.status(200).sendFile(imagePath);
+	}
+
+	public async list(req: Request, res: Response) {
+		const dir = await listDir(FullDirectory);
+		res.status(200).json(dir);
 	}
 }
