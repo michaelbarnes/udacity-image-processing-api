@@ -1,24 +1,129 @@
 <!doctype html>
 <html>
-	<link
-		href="https://fonts.googleapis.com/css?family=Roboto"
-		rel="stylesheet"
-	/>
 	<head>
-		<title>IP-API</title>
+		<title>Image Processing API</title>
+		<script>
+			let image = { data: null, fileName: null };
+			document.addEventListener("DOMContentLoaded", function () {
+				refreshList();
+
+				document
+					.getElementById("image-upload")
+					.addEventListener("change", function (event) {
+						event.preventDefault();
+						const fileInput = document.getElementById("image-upload");
+						const file = fileInput.files[0];
+						if (file) {
+							const reader = new FileReader();
+							reader.readAsDataURL(file);
+							reader.onloadend = function () {
+								image.fileName = generateFileName(file.name);
+								image.data = stripBase64UrlData(reader.result);
+							};
+						}
+					});
+			});
+
+			function refreshList() {
+				const imageListElement = "image-list";
+				document.getElementById(imageListElement).innerHTML = "";
+
+				fetch("http://0.0.0.0:3000/api/images/list", {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				})
+					.then(function (response) {
+						return response.json();
+					})
+					.then(function (files) {
+						const ul = document.getElementById(imageListElement);
+						for (let i = 0; i < files.length; i++) {
+							let li = document.createElement("li");
+							li.appendChild(document.createTextNode(files[i]));
+							ul.appendChild(li);
+						}
+					});
+			}
+
+			function uploadImage() {
+				if (!image.data) {
+					return alert("Please select an image first");
+				}
+				fetch("http://0.0.0.0:3000/api/images", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify(image),
+				})
+					.then((response) => {
+						if (response.status === 412) {
+							return alert(
+								"Image is too large to upload. Please upload a smaller image.",
+							);
+						}
+						if (response.status === 200) {
+							refreshList();
+						}
+					})
+					.catch((error) => {
+						alert("Failed to upload image: " + error);
+					});
+			}
+
+			function generateFileName(fileName) {
+				let newFileName = fileName.toLowerCase();
+				newFileName = newFileName.replace(" ", "");
+				return newFileName;
+			}
+
+			function stripBase64UrlData(data) {
+				return data.replace("data:image/png;base64,", "");
+			}
+		</script>
 		<style>
 			body {
-				font-family: Roboto;
+				font-family: Arial, serif;
 			}
 
 			.container {
 				display: flex;
 				justify-content: center;
 			}
+
+			.column {
+				flex-direction: column;
+				justify-content: center;
+			}
+
+			.center-text {
+				text-align: center;
+			}
+
+			.space-evenly {
+				justify-content: space-evenly;
+			}
+
+			.text-left-aligned {
+				text-align: left;
+			}
 		</style>
 	</head>
 
-	<body class="container">
-		<h1>Image Processing API</h1>
+	<body class="container column center-text">
+		<div>
+			<h1>Image Processing API</h1>
+		</div>
+		<div class="container space-evenly">
+			<div>
+				<h2>Available Images</h2>
+				<ul id="image-list" class="text-left-aligned"></ul>
+			</div>
+			<div>
+				<h2>Upload Image</h2>
+				<input id="image-upload" type="file" name="image" accept="image/*" />
+				<button onclick="uploadImage()">Upload</button>
+			</div>
+		</div>
 	</body>
 </html>

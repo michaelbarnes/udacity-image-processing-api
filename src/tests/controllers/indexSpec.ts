@@ -1,7 +1,10 @@
 import supertest from "supertest";
 import Server from "../../";
 
-const server: Server = new Server();
+const server: Server = new Server({
+	port: 3002,
+	createDirs: false,
+});
 // Adding the ts-ignore below because the types for supertest are wrong from what I can tell.
 // @ts-ignore
 const request = supertest(server.app);

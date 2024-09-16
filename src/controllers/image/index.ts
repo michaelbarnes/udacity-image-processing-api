@@ -7,6 +7,11 @@ import { resizeImage } from "../../utilities/sharpUtility";
 const FullDirectory: string = "assets/full";
 const ThumbDirectory: string = "assets/thumb";
 
+export type UploadImageProps = {
+	fileName: string;
+	data: string;
+};
+
 export default class ImageController {
 	public router: Router;
 
@@ -18,6 +23,7 @@ export default class ImageController {
 	private initRoutes() {
 		this.router.get("/images", this.get);
 		this.router.get("/images/list", this.list);
+		this.router.post("/images", this.createImage);
 	}
 
 	/**
@@ -77,5 +83,23 @@ export default class ImageController {
 	public async list(req: Request, res: Response) {
 		const dir = await listDir(FullDirectory);
 		res.status(200).json(dir);
+	}
+
+	public async createImage(req: Request, res: Response) {
+		if (!req.body) {
+			res.status(400).send({ message: "Body is required" });
+			return;
+		}
+		if (!req.body.fileName || !req.body.data) {
+			res
+				.status(400)
+				.send({ message: "Make sure you have set data and filename" });
+			return;
+		}
+		const uploadedImage = req.body as UploadImageProps;
+		const fullFileName = `${FullDirectory}/${uploadedImage.fileName}`;
+		const buffer = Buffer.from(uploadedImage.data, "base64");
+		await writeFile(fullFileName, buffer);
+		res.status(200).send();
 	}
 }
