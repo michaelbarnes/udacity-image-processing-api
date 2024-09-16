@@ -50,7 +50,7 @@ describe("tests functions from FileUtility", () => {
 
 	it("it should list content of dir", async () => {
 		const dirContent = await listDir(testingDir);
-		expect(dirContent.length).toEqual(1);
+		expect(dirContent?.length).toEqual(1);
 	});
 
 	it("it should delete a sample file", async () => {

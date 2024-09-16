@@ -5,7 +5,7 @@
 		<script>
 			let image = { data: null, fileName: null };
 			document.addEventListener("DOMContentLoaded", function () {
-				refreshList();
+				refreshLists();
 
 				document
 					.getElementById("image-upload")
@@ -24,11 +24,37 @@
 					});
 			});
 
-			function refreshList() {
-				const imageListElement = "image-list";
+			function refreshLists() {
+				refreshFull();
+				refreshThumb();
+			}
+
+			function refreshFull() {
+				const imageListElement = "full-list";
 				document.getElementById(imageListElement).innerHTML = "";
 
-				fetch("http://0.0.0.0:3000/api/images/list", {
+				fetch("http://localhost:3000/api/images/list/full", {
+					method: "GET",
+					headers: { "Content-Type": "application/json" },
+				})
+					.then(function (response) {
+						return response.json();
+					})
+					.then(function (files) {
+						const ul = document.getElementById(imageListElement);
+						for (let i = 0; i < files.length; i++) {
+							let li = document.createElement("li");
+							li.appendChild(document.createTextNode(files[i]));
+							ul.appendChild(li);
+						}
+					});
+			}
+
+			function refreshThumb() {
+				const imageListElement = "thumb-list";
+				document.getElementById(imageListElement).innerHTML = "";
+
+				fetch("http://localhost:3000/api/images/list/thumb", {
 					method: "GET",
 					headers: { "Content-Type": "application/json" },
 				})
@@ -49,7 +75,7 @@
 				if (!image.data) {
 					return alert("Please select an image first");
 				}
-				fetch("http://0.0.0.0:3000/api/images", {
+				fetch("http://localhost:3000/api/images", {
 					method: "POST",
 					headers: {
 						"Content-Type": "application/json",
@@ -63,7 +89,7 @@
 							);
 						}
 						if (response.status === 200) {
-							refreshList();
+							refreshFull();
 						}
 					})
 					.catch((error) => {
@@ -116,8 +142,11 @@
 		</div>
 		<div class="container space-evenly">
 			<div>
-				<h2>Available Images</h2>
-				<ul id="image-list" class="text-left-aligned"></ul>
+				<h2>Directories</h2>
+				<p class="text-left-aligned">/full</p>
+				<ul id="full-list" class="text-left-aligned"></ul>
+				<p class="text-left-aligned">/thumb</p>
+				<ul id="thumb-list" class="text-left-aligned"></ul>
 			</div>
 			<div>
 				<h2>Upload Image</h2>

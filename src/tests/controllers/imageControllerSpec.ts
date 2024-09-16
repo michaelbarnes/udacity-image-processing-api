@@ -35,4 +35,14 @@ describe("test the ImageController", () => {
 		);
 		expect(response.status).toEqual(200);
 	});
+
+	it("It should return 200 on full list", async () => {
+		const response = await request.get("/api/images/list/full");
+		expect(response.status).toEqual(200);
+	});
+
+	it("It should return 404 on lists", async () => {
+		const response = await request.get("/api/images/list/test");
+		expect(response.status).toEqual(404);
+	});
 });

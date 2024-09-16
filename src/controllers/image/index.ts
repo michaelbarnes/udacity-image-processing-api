@@ -22,7 +22,7 @@ export default class ImageController {
 
 	private initRoutes() {
 		this.router.get("/images", this.get);
-		this.router.get("/images/list", this.list);
+		this.router.get("/images/list/:dir", this.list);
 		this.router.post("/images", this.createImage);
 	}
 
@@ -81,7 +81,16 @@ export default class ImageController {
 	}
 
 	public async list(req: Request, res: Response) {
-		const dir = await listDir(FullDirectory);
+		const requestDir = req.params.dir;
+		if (!requestDir) {
+			res.status(400).send({ message: "Please provide a dir" });
+			return;
+		}
+		const dir = await listDir(`assets/${requestDir}`);
+		if (!dir) {
+			res.status(404).send({ message: "Directory not found" });
+			return;
+		}
 		res.status(200).json(dir);
 	}
 

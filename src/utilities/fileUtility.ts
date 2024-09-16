@@ -49,6 +49,10 @@ export const createDir = async (dirName: string): Promise<void> => {
 	await fs.mkdir(dirName, { recursive: true });
 };
 
-export const listDir = async (dirName: string): Promise<string[]> => {
-	return await fs.readdir(dirName);
+export const listDir = async (dirName: string): Promise<string[] | null> => {
+	try {
+		return await fs.readdir(dirName);
+	} catch (err) {
+		return null;
+	}
 };
