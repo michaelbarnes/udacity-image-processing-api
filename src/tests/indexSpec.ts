@@ -5,6 +5,7 @@ describe("tests server", () => {
 		const server = new Server({
 			port: 4000,
 			createDirs: false,
+			logging: false,
 		});
 		server.start();
 	});

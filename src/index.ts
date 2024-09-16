@@ -20,6 +20,10 @@ export type ServerOptions = {
 	 * directory if undefined or false
 	 */
 	createDirs: boolean | undefined;
+	/**
+	 * Switch logging on of off (true|false)
+	 */
+	logging: boolean;
 };
 
 export default class Server {
@@ -34,15 +38,17 @@ export default class Server {
 	}
 
 	public init(): void {
-		console.log("Server Config:", this.options);
 		this.app.set("port", this.options.port);
 		this.app.use(cors());
 		this.app.use(
 			express.json({
-				limit: "50mb",
+				limit: "50mb"
 			}),
 		);
-		this.app.use(logger);
+		if (this.options.logging) {
+			console.log("Server Config:", this.options);
+			this.app.use(logger);
+		}
 		this.app.use(this.controllers.router);
 	}
 
@@ -51,9 +57,11 @@ export default class Server {
 			await this.configureServer();
 		}
 		this.app.listen(this.app.get("port"), () => {
-			console.log(
-				`Server started and listening visit http://localhost:${this.options.port}`,
-			);
+			if (this.options.logging) {
+				console.log(
+					`Server started and listening visit http://localhost:${this.options.port}`,
+				);
+			}
 		});
 	}
 
@@ -66,22 +74,30 @@ export default class Server {
 		const fullDir = `${assetsDir}/full`;
 		const thumbDir = `${assetsDir}/thumb`;
 
-		console.log("Checking if the full and thumb folders are present");
+		if (this.options.logging) {
+			console.log("Checking if the full and thumb folders are present");
+		}
 		const dir = await dirExists(assetsDir);
 		if (!dir) {
-			console.log("Checking if the full and thumb directories being created");
+			if (this.options.logging) {
+				console.log("Checking if the full and thumb directories being created");
+			}
 			await createDir(fullDir);
 			await createDir(thumbDir);
 		}
 		const sampleFileName = `${fullDir}/sample.png`;
 		const sampleExists = await openFile(sampleFileName);
 		if (!sampleExists) {
-			console.log("Creating sample image");
+			if (this.options.logging) {
+				console.log("Creating sample image");
+			}
 			const buffer = Buffer.from(sampleImageData, "base64");
 			await writeFile(sampleFileName, buffer);
 		}
 		sampleExists?.close();
-		console.log("Server configured");
+		if (this.options.logging) {
+			console.log("Server configured");
+		}
 	}
 }
 
@@ -90,6 +106,7 @@ export default class Server {
 	const server = new Server({
 		port: 3000,
 		createDirs: true,
+		logging: true,
 	});
 	await server.start();
 })();

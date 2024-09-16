@@ -4,6 +4,7 @@ import Server from "../../";
 const server: Server = new Server({
 	port: 3001,
 	createDirs: false,
+	logging: false,
 });
 // Adding the ts-ignore below because the types for supertest are wrong from what I can tell.
 // @ts-ignore
