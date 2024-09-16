@@ -69,7 +69,7 @@ export default class Server {
 	 * Setup all the folders required for the app to function
 	 * @private
 	 */
-	private async configureServer(): Promise<void> {
+	public async configureServer(): Promise<void> {
 		const assetsDir = "assets";
 		const fullDir = `${assetsDir}/full`;
 		const thumbDir = `${assetsDir}/thumb`;

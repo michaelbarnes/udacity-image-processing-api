@@ -44,6 +44,8 @@ This will look at the `.nvmrc` file in the route directory and will use the Node
 ~ npm run build
 ```
 
+This will compile the TS files into the `./dist` folder in the route directory. The `./dist` directory is excluded from the git repo.
+
 ## Run the server
 
 To start the server simply run the start command.
@@ -108,6 +110,3 @@ This uploads the image to the `assets/full` directory.
 ```
 
 This command will build the code from source and then run Jasmine to execute the tests.
-
-This will compile the TS files into the `./dist` folder in the route directory
-

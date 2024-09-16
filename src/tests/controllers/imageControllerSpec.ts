@@ -11,6 +11,10 @@ const server: Server = new Server({
 const request = supertest(server.app);
 
 describe("test the ImageController", () => {
+	beforeAll(async () => {
+		await server.configureServer();
+	});
+
 	it("It should respond 404", async () => {
 		const response = await request.get(
 			"/api/images?filename=abc&width=200&height=200",
