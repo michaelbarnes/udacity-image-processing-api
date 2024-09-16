@@ -8,13 +8,20 @@ import {
 import { FileHandle } from "fs/promises";
 
 describe("tests functions from FileUtility", () => {
-	const testingDir = "assets/test";
+	const assetsDir = "assets";
+	const testingDir = `${assetsDir}/test`;
 	const testingFileName = "test.txt";
 	const testFileDir = `${testingDir}/${testingFileName}`;
 
 	let fileHandle: FileHandle | null;
 
 	beforeAll(async () => {
+		try {
+			await fs.opendir(assetsDir);
+		} catch (err) {
+			await fs.mkdir(assetsDir);
+		}
+
 		try {
 			await fs.opendir(testingDir);
 		} catch (err) {
@@ -32,11 +39,6 @@ describe("tests functions from FileUtility", () => {
 		}
 	});
 
-	it("it should open the sample png file that exists already", async () => {
-		const fileHandle = await openFile("assets/full/sample.png");
-		expect(fileHandle).toBeTruthy();
-	});
-
 	it("it should should be null because the file does not exist", async () => {
 		fileHandle = await openFile("assets/full/random.png");
 		expect(fileHandle).toBeNull();
@@ -44,6 +46,11 @@ describe("tests functions from FileUtility", () => {
 
 	it("it should write a sample file to the file system", async () => {
 		await writeFile(testFileDir, "Test data");
+		fileHandle = await openFile(testFileDir);
+		expect(fileHandle).toBeTruthy();
+	});
+
+	it("it should open the sample png file that exists already", async () => {
 		fileHandle = await openFile(testFileDir);
 		expect(fileHandle).toBeTruthy();
 	});

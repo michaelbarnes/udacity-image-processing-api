@@ -1,9 +1,9 @@
 import supertest from "supertest";
-import Server from "../../";
+import Server from "../../Server";
 
 const server: Server = new Server({
 	port: 3002,
-	createDirs: false,
+	createDirs: true,
 	logging: false,
 });
 // Adding the ts-ignore below because the types for supertest are wrong from what I can tell.

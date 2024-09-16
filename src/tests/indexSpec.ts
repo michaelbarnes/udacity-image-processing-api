@@ -1,4 +1,4 @@
-import Server from "../index";
+import Server from "../Server";
 
 describe("tests server", () => {
 	it("should start the server", () => {
