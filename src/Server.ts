@@ -86,7 +86,7 @@ export default class Server {
 			await createDir(fullDir);
 			await createDir(thumbDir);
 		}
-		const sampleFileName = `${fullDir}/sample.png`;
+		const sampleFileName = `${fullDir}/sample.jpg`;
 		const sampleExists = await openFile(sampleFileName);
 		if (!sampleExists) {
 			if (this.options.logging) {

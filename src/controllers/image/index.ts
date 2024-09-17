@@ -45,6 +45,9 @@ export default class ImageController {
 		const height: number | null = req.query.height
 			? Number(req.query.height)
 			: null;
+		const fit: string | null = req.query.fit
+			? (req.query.fit as string)
+			: "contain";
 
 		// First we make sure the query parameters provided are present
 		if (!fileName || !width || !height) {
@@ -53,27 +56,81 @@ export default class ImageController {
 			});
 			return;
 		}
+		const fileNameParts: string[] = fileName.split(".");
+		const name: string = fileNameParts[0];
+		const fileType: string = fileNameParts[1] ? fileNameParts[1] : "jpg";
 
-		const thumbFileName: string = `${ThumbDirectory}/${fileName}_${width}_${height}.png`;
-		const fullFileName: string = `${FullDirectory}/${fileName}.png`;
+		const thumbFileName: string = `${ThumbDirectory}/${name}_${width}_${height}_${fit}.${fileType}`;
+		const fullFileName: string = `${FullDirectory}/${name}.${fileType}`;
 
 		let thumbFile: FileHandle | null = await openFile(thumbFileName);
 
 		if (!thumbFile) {
-			const fullFile: FileHandle | null = await openFile(fullFileName);
+			console.log(
+				`[INFO] thumb file ${thumbFileName} does not exist in cache, creating new image`,
+			);
+			const sharpUtility: SharpUtility = new SharpUtility();
+			let fullFile: FileHandle | null = await openFile(fullFileName);
+
 			if (!fullFile) {
-				// Return 404, the supplied filename does not exist in the directory
-				res.status(404).send();
+				const fullFiles: string[] | null = await listDir(FullDirectory);
+				if (!fullFiles) {
+					res
+						.status(500)
+						.send({ message: "The assets/full directory does not exist." });
+					return;
+				}
+				let sourceFile: string | null = null;
+				for (let file of fullFiles) {
+					if (file.includes(name)) {
+						sourceFile = file;
+						break;
+					}
+				}
+				if (!sourceFile) {
+					res.status(404).send({
+						message: `The file: '${fileName}' does not exist in the assets/full path in any format, please upload one by visiting http://localhost:3000`,
+					});
+					return;
+				}
+
+				fullFile = await openFile(`${FullDirectory}/${sourceFile}`);
+
+				if (!fullFile) {
+					res
+						.status(500)
+						.send({ message: `Failed to find ${FullDirectory}/${sourceFile}` });
+					return;
+				}
+				const fileBuffer: Buffer = await fullFile.readFile();
+				await sharpUtility.init(fileBuffer);
+				try {
+					console.log(`[INFO] Converting the file to ${fileType}`);
+					await sharpUtility.convert(fileType);
+				} catch (err) {
+					res.status(400).send({
+						message:
+							"Invalid file type provided, Expected one of: heic, heif, avif, jpeg, jpg, jpe, tile, dz, png, raw, tiff, tif, webp, gif, jp2, jpx, j2k, j2c, jxl",
+					});
+					return;
+				}
+			} else {
+				const fileBuffer: Buffer = await fullFile.readFile();
+				await sharpUtility.init(fileBuffer);
+			}
+			await fullFile.close();
+			console.log(`[INFO] Resizing new file to ${width} x ${height}`);
+			try {
+				await sharpUtility.resize(width, height, fit);
+			} catch (err) {
+				res.status(400).send({
+					message:
+						"Invalid fit parameter provided type provided, it must be contain, cover, fill, inside or outside",
+				});
 				return;
 			}
 
-			const fileBuffer: Buffer = await fullFile.readFile();
-			await fullFile.close();
-
-			const sharpUtility = new SharpUtility();
-			await sharpUtility.resize(fileBuffer, width, height);
 			const resizedImage: Buffer = await sharpUtility.serialize();
-
 			await writeFile(thumbFileName, resizedImage);
 		}
 		await thumbFile?.close();
@@ -82,7 +139,8 @@ export default class ImageController {
 	}
 
 	/**
-	 * Lists the files for the specified directory.
+	 * Lists the files for the specified directory e.g.:
+	 * /api/images/full
 	 * If the directory does not exist, it returns a 404
 	 * @param req
 	 * @param res
@@ -103,6 +161,11 @@ export default class ImageController {
 
 	/**
 	 * Writes a new image to disk based.
+	 * The body of the request should include the following:
+	 * {
+	 *     fileName: string,
+	 *     data: base-64 encoded image data
+	 * }
 	 * @param req
 	 * @param res
 	 */

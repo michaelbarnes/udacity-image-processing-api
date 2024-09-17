@@ -41,6 +41,34 @@ describe("test the ImageController", () => {
 		expect(response.status).toEqual(200);
 	});
 
+	it("It should respond 200 and convert", async () => {
+		const response = await request.get(
+			"/api/images?filename=sample.jpg&width=200&height=200",
+		);
+		expect(response.status).toEqual(200);
+	});
+
+	it("It should respond 200 and fit", async () => {
+		const response = await request.get(
+			"/api/images?filename=sample&width=200&height=200&fit=inside",
+		);
+		expect(response.status).toEqual(200);
+	});
+
+	it("It should respond 400 due to invalid fit", async () => {
+		const response = await request.get(
+			"/api/images?filename=sample&width=200&height=200&fit=none",
+		);
+		expect(response.status).toEqual(400);
+	});
+
+	it("It should respond 400 due to invalid file type", async () => {
+		const response = await request.get(
+			"/api/images?filename=sample.pdf&width=200&height=200&fit=none",
+		);
+		expect(response.status).toEqual(400);
+	});
+
 	it("It should return 200 on full list", async () => {
 		const response = await request.get("/api/images/list/full");
 		expect(response.status).toEqual(200);

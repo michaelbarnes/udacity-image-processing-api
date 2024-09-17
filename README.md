@@ -16,7 +16,7 @@ This project requires nvm or the latest LTS Node.js version. Follow the [nvm ins
 
 ### Configure Node.js Env
 
-1. If you're using nvm run the following command in the route directory:
+If you're using nvm run the following command in the route directory:
 
 ```shell
 ~ nvm use
@@ -24,7 +24,7 @@ This project requires nvm or the latest LTS Node.js version. Follow the [nvm ins
 
 This will look at the `.nvmrc` file in the route directory and will use the Node.js version specified in the file.
 
-> Note Windows User: If you're on Windows using nvm-windows, nvm use without a verion number does not work. Please install the version specified in the .nvmrc file
+> NB! Windows Users; If you're on Windows using nvm-windows, nvm use without a verion number does not work. Please install the version specified in the .nvmrc file
 
 ### Clone & Install Dependencies
 
@@ -38,7 +38,7 @@ This will look at the `.nvmrc` file in the route directory and will use the Node
 
 ### Building
 
-1. To compile and build from source run the following command.
+To compile and build from source run the following command.
 
 ```shell
 ~ npm run build
@@ -60,20 +60,48 @@ with a small bit of UI that allows you to upload new files to the server.
 
 > The Server class has a setting named: `createDirs: true | false`. By default this is set to true. If it's `true` it will
 > create the required directories (`assets/full` & `assets/thumb`) in the route directory of the project, if they do not
-> exist and create a sample .png file in the `assets/full` directory.
-> The two directories are excluded from the git repo.
+> exist and create a sample .jpg file in the `assets/full` directory.
+> The two asset directories are excluded from the git repo.
 
 ### API Usage
 
-1. To resize an existing image use the following:
+#### Fetch an image
 
 ```
 GET /api/images?filename=sample&width=200&height=200
 ```
 
-If the file with the name as specified by the `filename` query parameter is not on disk, the API will return 404.
+This fetches a thumbnail version of the image specified by the `filename` query parameter and resizes it based on the
+`width` and `height` query parameters. The server serves up a cached version if the file already exists.
 
-2. To view a list of availible images use:
+> If the file with the name as specified by the `filename` query parameter does not exist in the `assets/full` directory,
+> the API will return 404. Upload a new image to the `assets/full` directory by visiting http://localhost:3000 when the
+> server in running.
+
+##### Handling different images types
+
+To retrieve a different format of the image, specify the file extension in the `filename` query parameter. This allows the server
+handle multiple image formats e.g.
+
+```
+GET /api/images?filename=sample.png&width=200&height=200
+```
+
+> Supported file types includes: heic, heif, avif, jpeg, jpg, jpe, tile, dz, png, raw, tiff, tif, webp, gif, jp2, jpx, j2k, j2c,
+> jxl. The endpoint will return HTTP 400 if the file type is not supported.
+
+##### Adjust image fit
+
+By default the server will use the `contain` fit property to fit the image in the dimensions provided (width and height).
+If you want to override this, set the `fit` query parameter to one of the CSS [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property options.
+
+```
+GET /api/images?filename=sample&width=200&height=200&fit=inside
+```
+
+> The `fit` query parameter is optional.
+
+#### List available images
 
 ```
 GET /api/images/list/full
@@ -82,7 +110,7 @@ GET /api/images/list/full
 This fetches a list of files in a directory in the `assets` directory. It will return 404 if the directory is not in the
 file system.
 
-3. To upload a new image use:
+#### Upload Image
 
 ```
 POST /api/images
@@ -91,11 +119,12 @@ Body { fileName: "test.png", data: "iVBORw0KGgoAAAANSU..." }
 
 This uploads the image to the `assets/full` directory.
 
-> Make sure that the 'data' property expects the string to be a base64 encoded string of the image.
+> Make sure that the `data` property expects the string to be a base64 encoded string of the image, excluding the Data
+> URL portion e.g. remove `data:image/jpeg;base64,`
 
 ## Development
 
-1. Whilst editing code and making changes you can use nodemon to refresh after changes are saved to disk. This runs the TS files using ts-node, it's not the compiled code.
+Whilst editing code and making changes you can use nodemon to refresh after changes are saved to disk. This runs the TS files using ts-node, it's not the compiled code.
 
 ```shell
 ~ npm run dev
@@ -103,7 +132,7 @@ This uploads the image to the `assets/full` directory.
 
 ### Testing
 
-1. To run the tests use the following command:
+To run the tests use the following command:
 
 ```shell
 ~ npm run test

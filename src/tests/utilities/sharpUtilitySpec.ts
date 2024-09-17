@@ -11,7 +11,8 @@ describe("tests functions from SharpUtility", () => {
 
 	it("should resize the image", async () => {
 		if (buffer) {
-			await sharpUtility.resize(buffer, 200, 200);
+			await sharpUtility.init(buffer);
+			await sharpUtility.resize(200, 200, "contain");
 			expect(sharpUtility.image).toBeTruthy();
 		} else {
 			throw new Error("Failed to resize the image");
@@ -20,7 +21,19 @@ describe("tests functions from SharpUtility", () => {
 
 	it("should serialize to Buffer", async () => {
 		if (buffer) {
-			await sharpUtility.resize(buffer, 200, 200);
+			await sharpUtility.init(buffer);
+			await sharpUtility.resize(200, 200, "contain");
+			const resizedImageBuffer = await sharpUtility.serialize();
+			expect(resizedImageBuffer).toBeTruthy();
+		} else {
+			throw new Error("Failed to resize the image");
+		}
+	});
+
+	it("should convert the image", async () => {
+		if (buffer) {
+			await sharpUtility.init(buffer);
+			await sharpUtility.convert("png");
 			const resizedImageBuffer = await sharpUtility.serialize();
 			expect(resizedImageBuffer).toBeTruthy();
 		} else {
