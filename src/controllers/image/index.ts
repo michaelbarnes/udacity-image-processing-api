@@ -2,7 +2,7 @@ import path from "path";
 import { FileHandle } from "fs/promises";
 import { Router, Request, Response } from "express";
 import { openFile, writeFile, listDir } from "../../utilities/fileUtility";
-import { resizeImage } from "../../utilities/sharpUtility";
+import SharpUtility from "../../utilities/sharpUtility";
 
 const FullDirectory: string = "assets/full";
 const ThumbDirectory: string = "assets/thumb";
@@ -57,7 +57,6 @@ export default class ImageController {
 		const thumbFileName: string = `${ThumbDirectory}/${fileName}_${width}_${height}.png`;
 		const fullFileName: string = `${FullDirectory}/${fileName}.png`;
 
-		// Next, try and get the supplied thumb by size
 		let thumbFile: FileHandle | null = await openFile(thumbFileName);
 
 		if (!thumbFile) {
@@ -71,7 +70,9 @@ export default class ImageController {
 			const fileBuffer: Buffer = await fullFile.readFile();
 			await fullFile.close();
 
-			const resizedImage: Buffer = await resizeImage(fileBuffer, width, height);
+			const sharpUtility = new SharpUtility();
+			await sharpUtility.resize(fileBuffer, width, height);
+			const resizedImage: Buffer = await sharpUtility.serialize();
 
 			await writeFile(thumbFileName, resizedImage);
 		}
@@ -80,6 +81,12 @@ export default class ImageController {
 		res.status(200).sendFile(imagePath);
 	}
 
+	/**
+	 * Lists the files for the specified directory.
+	 * If the directory does not exist, it returns a 404
+	 * @param req
+	 * @param res
+	 */
 	public async list(req: Request, res: Response) {
 		const requestDir = req.params.dir;
 		if (!requestDir) {
@@ -94,6 +101,11 @@ export default class ImageController {
 		res.status(200).json(dir);
 	}
 
+	/**
+	 * Writes a new image to disk based.
+	 * @param req
+	 * @param res
+	 */
 	public async createImage(req: Request, res: Response) {
 		if (!req.body) {
 			res.status(400).send({ message: "Body is required" });
