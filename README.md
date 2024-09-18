@@ -9,6 +9,7 @@ Here are the key libraries used in this application:
 4. Express - HTTP server.
 5. Sharp - Image processing library.
 6. Prettier - Code formatting (options set to use --use-tabs for tab indentation, I prefer it).
+7. ESLint TypeScript - This does some linting on the code to make it better.
 
 ## Setup
 
