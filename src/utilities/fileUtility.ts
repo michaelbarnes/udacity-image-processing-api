@@ -12,6 +12,7 @@ export const openFile = async (
 	try {
 		return await fs.open(fileName, "r");
 	} catch (err) {
+		console.warn(err);
 		return null;
 	}
 };
@@ -41,6 +42,7 @@ export const dirExists = async (dirName: string): Promise<boolean> => {
 		await fs.opendir(dirName);
 		return true;
 	} catch (err) {
+		console.warn(err);
 		return false;
 	}
 };
@@ -53,6 +55,7 @@ export const listDir = async (dirName: string): Promise<string[] | null> => {
 	try {
 		return await fs.readdir(dirName);
 	} catch (err) {
+		console.warn(err);
 		return null;
 	}
 };

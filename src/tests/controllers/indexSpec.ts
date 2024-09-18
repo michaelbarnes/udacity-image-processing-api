@@ -6,7 +6,9 @@ const server: Server = new Server({
 	createDirs: true,
 	logging: false,
 });
-// Adding the ts-ignore below because the types for supertest are wrong from what I can tell.
+
+// Adding this because I cant figure out why the IDE linting is not working
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const request = supertest(server.app);
 

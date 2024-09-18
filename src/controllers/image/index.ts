@@ -63,7 +63,7 @@ export default class ImageController {
 		const thumbFileName: string = `${ThumbDirectory}/${name}_${width}_${height}_${fit}.${fileType}`;
 		const fullFileName: string = `${FullDirectory}/${name}.${fileType}`;
 
-		let thumbFile: FileHandle | null = await openFile(thumbFileName);
+		const thumbFile: FileHandle | null = await openFile(thumbFileName);
 
 		if (!thumbFile) {
 			console.log(
@@ -81,7 +81,7 @@ export default class ImageController {
 					return;
 				}
 				let sourceFile: string | null = null;
-				for (let file of fullFiles) {
+				for (const file of fullFiles) {
 					if (file.includes(name)) {
 						sourceFile = file;
 						break;
@@ -108,6 +108,7 @@ export default class ImageController {
 					console.log(`[INFO] Converting the file to ${fileType}`);
 					await sharpUtility.convert(fileType);
 				} catch (err) {
+					console.warn(err);
 					res.status(400).send({
 						message:
 							"Invalid file type provided, Expected one of: heic, heif, avif, jpeg, jpg, jpe, tile, dz, png, raw, tiff, tif, webp, gif, jp2, jpx, j2k, j2c, jxl",
@@ -123,6 +124,7 @@ export default class ImageController {
 			try {
 				await sharpUtility.resize(width, height, fit);
 			} catch (err) {
+				console.warn(err);
 				res.status(400).send({
 					message:
 						"Invalid fit parameter provided type provided, it must be contain, cover, fill, inside or outside",

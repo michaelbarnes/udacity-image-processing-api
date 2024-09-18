@@ -6,7 +6,8 @@ const server: Server = new Server({
 	createDirs: true,
 	logging: false,
 });
-// Adding the ts-ignore below because the types for supertest are wrong from what I can tell.
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 const request = supertest(server.app);
 

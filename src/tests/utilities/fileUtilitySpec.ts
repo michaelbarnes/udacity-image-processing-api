@@ -19,12 +19,14 @@ describe("tests functions from FileUtility", () => {
 		try {
 			await fs.opendir(assetsDir);
 		} catch (err) {
+			console.warn(err);
 			await fs.mkdir(assetsDir);
 		}
 
 		try {
 			await fs.opendir(testingDir);
 		} catch (err) {
+			console.warn(err);
 			await fs.mkdir(testingDir);
 		}
 	});

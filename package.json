@@ -4,27 +4,32 @@
 	"description": "A Node.js server that processes images and resizes them based on the URL parameters provided.",
 	"main": "index.js",
 	"scripts": {
+		"lint": "npx eslint .",
 		"jasmine": "jasmine",
-		"build": "npx tsc",
-		"test": "npm run prettier && npm run build && npm run jasmine",
+		"build": "npm run prettier && npm run lint && npx tsc",
+		"test": "npm run build && npm run jasmine",
 		"prettier": "npx prettier . --write --use-tabs",
 		"start": "npm run build && node ./dist",
-		"dev": "npm run prettier && npx nodemon ./src/index.ts"
+		"dev": "npm run prettier && npm run lint && npx nodemon ./src/index.ts"
 	},
 	"author": "Michael Barnes",
 	"license": "MIT",
 	"devDependencies": {
+		"@eslint/js": "^9.10.0",
 		"@types/cors": "^2.8.17",
+		"@types/eslint__js": "^8.42.3",
 		"@types/express": "^4.17.21",
 		"@types/jasmine": "^5.1.4",
 		"@types/node": "^22.5.4",
 		"@types/sharp": "^0.31.1",
 		"@types/supertest": "^6.0.2",
+		"eslint": "^9.10.0",
 		"nodemon": "^3.1.4",
 		"prettier": "3.3.3",
 		"supertest": "^7.0.0",
 		"ts-node": "^10.9.2",
-		"typescript": "^5.6.2"
+		"typescript": "^5.6.2",
+		"typescript-eslint": "^8.6.0"
 	},
 	"dependencies": {
 		"cors": "^2.8.5",

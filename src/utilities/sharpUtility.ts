@@ -1,11 +1,7 @@
 import sharp, { FitEnum, FormatEnum, Sharp } from "sharp";
 
 export default class SharpUtility {
-	public image: Sharp | null;
-
-	constructor() {
-		this.image = null;
-	}
+	public image: Sharp | null = null;
 
 	public async init(file: string | Buffer) {
 		this.image = await sharp(file);
