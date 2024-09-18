@@ -8,7 +8,6 @@ describe("tests functions from SharpUtility", () => {
 
 	beforeAll(async () => {
 		const dir = path.join(__dirname, "../../../assets/full/fjord.jpg");
-		console.log(dir);
 		const file = await openFile(dir);
 		if (file) buffer = await file.readFile();
 	});

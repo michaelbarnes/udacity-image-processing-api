@@ -108,7 +108,9 @@ export default class ImageController {
 					console.log(`[INFO] Converting the file to ${fileType}`);
 					await sharpUtility.convert(fileType);
 				} catch (err) {
-					console.warn(err);
+					if (err instanceof Error) {
+						console.warn("convert warning", err.message);
+					}
 					res.status(400).send({
 						message:
 							"Invalid file type provided, Expected one of: heic, heif, avif, jpeg, jpg, jpe, tile, dz, png, raw, tiff, tif, webp, gif, jp2, jpx, j2k, j2c, jxl",
@@ -124,7 +126,9 @@ export default class ImageController {
 			try {
 				await sharpUtility.resize(width, height, fit);
 			} catch (err) {
-				console.warn(err);
+				if (err instanceof Error) {
+					console.warn("resize warning", err.message);
+				}
 				res.status(400).send({
 					message:
 						"Invalid fit parameter provided type provided, it must be contain, cover, fill, inside or outside",

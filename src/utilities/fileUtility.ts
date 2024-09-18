@@ -12,7 +12,9 @@ export const openFile = async (
 	try {
 		return await fs.open(fileName, "r");
 	} catch (err) {
-		console.warn(err);
+		if (err instanceof Error) {
+			console.warn("[open warning: ]", err.message);
+		}
 		return null;
 	}
 };
@@ -42,7 +44,9 @@ export const dirExists = async (dirName: string): Promise<boolean> => {
 		await fs.opendir(dirName);
 		return true;
 	} catch (err) {
-		console.warn(err);
+		if (err instanceof Error) {
+			console.warn("[opendir warning: ]", err.message);
+		}
 		return false;
 	}
 };
@@ -55,7 +59,9 @@ export const listDir = async (dirName: string): Promise<string[] | null> => {
 	try {
 		return await fs.readdir(dirName);
 	} catch (err) {
-		console.warn(err);
+		if (err instanceof Error) {
+			console.warn("[readdir warning: ]", err.message);
+		}
 		return null;
 	}
 };
