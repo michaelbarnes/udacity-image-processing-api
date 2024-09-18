@@ -76,12 +76,11 @@ export default class Server {
 		if (this.options.logging) {
 			console.log("Checking if the thumb directory exists");
 		}
-		const dir = await dirExists(assetsDir);
+		const dir = await dirExists(thumbDir);
 		if (!dir) {
 			if (this.options.logging) {
 				console.log("Creating thumb directory");
 			}
-			await createDir(assetsDir);
 			await createDir(thumbDir);
 		}
 
