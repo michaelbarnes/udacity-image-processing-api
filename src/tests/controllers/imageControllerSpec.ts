@@ -36,35 +36,35 @@ describe("test the ImageController", () => {
 
 	it("It should respond 200", async () => {
 		const response = await request.get(
-			"/api/images?filename=sample&width=200&height=200",
+			"/api/images?filename=fjord&width=200&height=200",
 		);
 		expect(response.status).toEqual(200);
 	});
 
 	it("It should respond 200 and convert", async () => {
 		const response = await request.get(
-			"/api/images?filename=sample.jpg&width=200&height=200",
+			"/api/images?filename=fjord.png&width=200&height=200",
 		);
 		expect(response.status).toEqual(200);
 	});
 
 	it("It should respond 200 and fit", async () => {
 		const response = await request.get(
-			"/api/images?filename=sample&width=200&height=200&fit=inside",
+			"/api/images?filename=fjord&width=200&height=200&fit=inside",
 		);
 		expect(response.status).toEqual(200);
 	});
 
 	it("It should respond 400 due to invalid fit", async () => {
 		const response = await request.get(
-			"/api/images?filename=sample&width=200&height=200&fit=none",
+			"/api/images?filename=fjord&width=200&height=200&fit=none",
 		);
 		expect(response.status).toEqual(400);
 	});
 
 	it("It should respond 400 due to invalid file type", async () => {
 		const response = await request.get(
-			"/api/images?filename=sample.pdf&width=200&height=200&fit=none",
+			"/api/images?filename=fjord.pdf&width=200&height=200",
 		);
 		expect(response.status).toEqual(400);
 	});

@@ -30,18 +30,14 @@ export default class SharpUtility {
 
 	public async convert(format: string) {
 		if (!this.image) {
-			throw new Error(
-				"image property is null or undefined, please resize the image first.",
-			);
+			throw new Error("image property is null or undefined, first run init()");
 		}
 		this.image = this.image.toFormat(format as keyof FormatEnum);
 	}
 
 	public async serialize() {
 		if (!this.image) {
-			throw new Error(
-				"image property is null or undefined, please resize the image first.",
-			);
+			throw new Error("image property is null or undefined, first run init()");
 		}
 		return await this.image.toBuffer();
 	}

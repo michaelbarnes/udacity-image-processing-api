@@ -66,36 +66,25 @@ export default class Server {
 	}
 
 	/**
-	 * Setup all the folders required for the app to function
+	 * Setup all the directories required for the app to function
 	 * @private
 	 */
 	public async configureServer(): Promise<void> {
 		const assetsDir = "assets";
-		const fullDir = `${assetsDir}/full`;
 		const thumbDir = `${assetsDir}/thumb`;
 
 		if (this.options.logging) {
-			console.log("Checking if the full and thumb folders are present");
+			console.log("Checking if the thumb directory exists");
 		}
 		const dir = await dirExists(assetsDir);
 		if (!dir) {
 			if (this.options.logging) {
-				console.log("Checking if the full and thumb directories being created");
+				console.log("Creating thumb directory");
 			}
 			await createDir(assetsDir);
-			await createDir(fullDir);
 			await createDir(thumbDir);
 		}
-		const sampleFileName = `${fullDir}/sample.jpg`;
-		const sampleExists = await openFile(sampleFileName);
-		if (!sampleExists) {
-			if (this.options.logging) {
-				console.log("Creating sample image");
-			}
-			const buffer = Buffer.from(sampleImageData, "base64");
-			await writeFile(sampleFileName, buffer);
-		}
-		sampleExists?.close();
+
 		if (this.options.logging) {
 			console.log("Server configured");
 		}

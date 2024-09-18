@@ -44,7 +44,7 @@ To compile and build from source run the following command.
 ~ npm run build
 ```
 
-This will compile the TS files into the `./dist` folder in the route directory. The `./dist` directory is excluded from the git repo.
+This will compile the TS files into the `./dist` directory in the route directory. The `./dist` directory is excluded from the git repo.
 
 ## Run the server
 
@@ -54,21 +54,21 @@ To start the server simply run the start command.
 ~ npm run start
 ```
 
-This start the server on port 3000. Open a new browser window and navigate to [http://localhost:3000](http:localhost:3000).
+This starts the server on port 3000. Open a new browser window and navigate to [http://localhost:3000](http:localhost:3000).
 This launches the application front-end, where you can see a list of directories and all the files contained within, along
 with a small bit of UI that allows you to upload new files to the server.
 
 > The Server class has a setting named: `createDirs: true | false`. By default this is set to true. If it's `true` it will
-> create the required directories (`assets/full` & `assets/thumb`) in the route directory of the project, if they do not
-> exist and create a sample .jpg file in the `assets/full` directory.
-> The two asset directories are excluded from the git repo.
+> create the required directories `assets/thumb`) in the route directory of the project, if it does not
+> exist.
+> The thumb directory is excluded from the repo.
 
 ### API Usage
 
 #### Fetch an image
 
 ```
-GET /api/images?filename=sample&width=200&height=200
+GET /api/images?filename=fjord&width=200&height=200
 ```
 
 This fetches a thumbnail version of the image specified by the `filename` query parameter and resizes it based on the
@@ -84,7 +84,7 @@ To retrieve a different format of the image, specify the file extension in the `
 handle multiple image formats e.g.
 
 ```
-GET /api/images?filename=sample.png&width=200&height=200
+GET /api/images?filename=fjord.png&width=200&height=200
 ```
 
 > Supported file types includes: heic, heif, avif, jpeg, jpg, jpe, tile, dz, png, raw, tiff, tif, webp, gif, jp2, jpx, j2k, j2c,
