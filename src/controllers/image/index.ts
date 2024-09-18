@@ -130,7 +130,7 @@ export default class ImageController {
 				return;
 			}
 
-			const resizedImage: Buffer = await sharpUtility.serialize();
+			const resizedImage: Buffer = await sharpUtility.toBuffer();
 			await writeFile(thumbFileName, resizedImage);
 		}
 		await thumbFile?.close();

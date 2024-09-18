@@ -54,7 +54,7 @@ To start the server simply run the start command.
 ~ npm run start
 ```
 
-This starts the server on port 3000. Open a new browser window and navigate to [http://localhost:3000](http:localhost:3000).
+This starts the server on port 3000. Open a new browser window and navigate to [http://localhost:3000](http://localhost:3000).
 This launches the application front-end, where you can see a list of directories and all the files contained within, along
 with a small bit of UI that allows you to upload new files to the server.
 

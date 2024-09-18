@@ -35,7 +35,7 @@ export default class SharpUtility {
 		this.image = this.image.toFormat(format as keyof FormatEnum);
 	}
 
-	public async serialize() {
+	public async toBuffer() {
 		if (!this.image) {
 			throw new Error("image property is null or undefined, first run init()");
 		}

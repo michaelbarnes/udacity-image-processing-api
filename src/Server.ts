@@ -2,13 +2,7 @@ import express from "express";
 import cors from "cors";
 import { logger } from "./middleware/logger";
 import Controllers from "./controllers";
-import {
-	dirExists,
-	createDir,
-	writeFile,
-	openFile,
-} from "./utilities/fileUtility";
-import { sampleImageData } from "./utilities/sampleData";
+import { dirExists, createDir } from "./utilities/fileUtility";
 
 export type ServerOptions = {
 	/**

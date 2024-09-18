@@ -1,12 +1,16 @@
 import SharpUtility from "../../utilities/sharpUtility";
-import { sampleImageData } from "../../utilities/sampleData";
+import { openFile } from "../../utilities/fileUtility";
+import path from "path";
 
 describe("tests functions from SharpUtility", () => {
 	const sharpUtility = new SharpUtility();
-	let buffer: Buffer | null = null;
+	let buffer: Buffer;
 
-	beforeAll(() => {
-		buffer = Buffer.from(sampleImageData, "base64");
+	beforeAll(async () => {
+		const dir = path.join(__dirname, "../../../assets/full/fjord.jpg");
+		console.log(dir);
+		const file = await openFile(dir);
+		if (file) buffer = await file.readFile();
 	});
 
 	it("should resize the image", async () => {
@@ -23,7 +27,7 @@ describe("tests functions from SharpUtility", () => {
 		if (buffer) {
 			await sharpUtility.init(buffer);
 			await sharpUtility.resize(200, 200, "contain");
-			const resizedImageBuffer = await sharpUtility.serialize();
+			const resizedImageBuffer = await sharpUtility.toBuffer();
 			expect(resizedImageBuffer).toBeTruthy();
 		} else {
 			throw new Error("Failed to resize the image");
@@ -34,12 +38,10 @@ describe("tests functions from SharpUtility", () => {
 		if (buffer) {
 			await sharpUtility.init(buffer);
 			await sharpUtility.convert("png");
-			const resizedImageBuffer = await sharpUtility.serialize();
+			const resizedImageBuffer = await sharpUtility.toBuffer();
 			expect(resizedImageBuffer).toBeTruthy();
 		} else {
 			throw new Error("Failed to resize the image");
 		}
 	});
-
-	it("should convert image to JPG", async () => {});
 });
